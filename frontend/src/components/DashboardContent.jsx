@@ -13,7 +13,6 @@ const DashboardContent = () => {
       // Refresh the page to show new data
       window.location.reload();
     } catch (error) {
-      console.error('Sync failed:', error);
       alert(`Sync failed: ${error.response?.data?.error || error.message}`);
     } finally {
       setSyncLoading(false);

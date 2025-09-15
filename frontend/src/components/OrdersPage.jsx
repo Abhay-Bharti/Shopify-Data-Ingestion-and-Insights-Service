@@ -21,7 +21,6 @@ const OrdersPage = () => {
       setOrders(response.data || []);
     } catch (err) {
       setError('Failed to fetch orders data');
-      console.error('Error fetching orders:', err);
     } finally {
       setLoading(false);
     }

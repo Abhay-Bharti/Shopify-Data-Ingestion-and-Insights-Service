@@ -21,7 +21,6 @@ const ProductsPage = () => {
       setProducts(response.data || []);
     } catch (err) {
       setError('Failed to fetch products data');
-      console.error('Error fetching products:', err);
     } finally {
       setLoading(false);
     }

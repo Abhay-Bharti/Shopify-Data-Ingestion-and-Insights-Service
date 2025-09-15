@@ -22,7 +22,6 @@ export const AuthProvider = ({ children }) => {
   const checkAuthStatus = async () => {
     try {
       const token = localStorage.getItem('token');
-      console.log('Checking auth status, token:', token ? 'exists' : 'not found');
       
       if (!token) {
         setLoading(false);
@@ -33,12 +32,9 @@ export const AuthProvider = ({ children }) => {
       apiService.setAuthToken(token);
       
       // Verify token and get user data
-      console.log('Verifying token with API...');
       const response = await apiService.getProfile();
-      console.log('Profile response:', response);
       setUser(response.data.user);
     } catch (error) {
-      console.error('Auth check failed:', error);
       localStorage.removeItem('token');
       apiService.clearAuthToken();
       setUser(null);
@@ -49,9 +45,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      console.log('Attempting login for:', email);
       const response = await apiService.login(email, password);
-      console.log('Login response:', response);
       
       const { user, token } = response.data;
       
@@ -59,10 +53,8 @@ export const AuthProvider = ({ children }) => {
       apiService.setAuthToken(token);
       setUser(user);
       
-      console.log('Login successful, user set:', user);
       return user;
     } catch (error) {
-      console.error('Login error:', error);
       throw new Error(error.response?.data?.message || 'Login failed');
     }
   };

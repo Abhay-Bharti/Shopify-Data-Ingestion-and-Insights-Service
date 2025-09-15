@@ -20,13 +20,9 @@ const Login = () => {
     setLoading(true);
 
     try {
-      console.log('Login form submitted');
       const user = await login(formData.email, formData.password);
-      console.log('Login completed, user:', user);
-      console.log('Navigating to dashboard...');
       navigate('/dashboard');
     } catch (err) {
-      console.error('Login error in component:', err);
       setError(err.message || 'Login failed. Please check your credentials.');
     } finally {
       setLoading(false);
