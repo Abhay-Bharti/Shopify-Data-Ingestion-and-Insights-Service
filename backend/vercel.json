@@ -22,10 +22,5 @@
     "SHOPIFY_WEBHOOK_SECRET": "@shopify_webhook_secret",
     "FRONTEND_URL": "@frontend_url",
     "NODE_ENV": "production"
-  },
-  "functions": {
-    "src/server.js": {
-      "maxDuration": 30
-    }
   }
 }
