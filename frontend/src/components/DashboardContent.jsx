@@ -24,41 +24,40 @@ const DashboardContent = () => {
     <div className="space-y-8">
       {/* Welcome Section */}
       <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-8 rounded-xl shadow-sm border border-blue-100">
-        <h2 className="text-3xl font-bold text-gray-900 mb-3">Welcome to Shopify Analytics</h2>
-        <p className="text-gray-600 text-lg">
-          Monitor your Shopify store performance with detailed analytics on customers, products, and orders.
-          Use the navigation menu to explore different sections.
-        </p>
-      </div>
-
-      {/* Quick Actions */}
-      <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-        <h3 className="text-xl font-semibold mb-6 text-center">Quick Actions</h3>
-        <div className="flex justify-center">
-          <button 
-            onClick={handleSyncData}
-            disabled={syncLoading}
-            className={`inline-flex items-center px-8 py-4 rounded-lg text-base font-medium transition-all duration-200 ${
-              syncLoading 
-                ? 'bg-gray-400 cursor-not-allowed text-white' 
-                : 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105'
-            }`}
-          >
-            {syncLoading ? (
-              <>
-                <svg className="animate-spin -ml-1 mr-3 h-5 w-5" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Syncing...
-              </>
-            ) : (
-              <>
-                <FiRefreshCw className="mr-3 h-5 w-5" />
-                Sync Store Data
-              </>
-            )}
-          </button>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="flex-1">
+            <h2 className="text-3xl font-bold text-gray-900 mb-3">Welcome to Shopify Analytics</h2>
+            <p className="text-gray-600 text-lg">
+              Monitor your Shopify store performance with detailed analytics on customers, products, and orders.
+              Use the navigation menu to explore different sections.
+            </p>
+          </div>
+          <div className="flex-shrink-0">
+            <button 
+              onClick={handleSyncData}
+              disabled={syncLoading}
+              className={`inline-flex items-center px-6 py-3 rounded-lg text-base font-medium transition-all duration-200 ${
+                syncLoading 
+                  ? 'bg-gray-400 cursor-not-allowed text-white' 
+                  : 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105'
+              }`}
+            >
+              {syncLoading ? (
+                <>
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Syncing...
+                </>
+              ) : (
+                <>
+                  <FiRefreshCw className="mr-3 h-5 w-5" />
+                  Sync Store Data
+                </>
+              )}
+            </button>
+          </div>
         </div>
       </div>
 
