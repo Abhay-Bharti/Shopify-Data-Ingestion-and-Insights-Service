@@ -31,7 +31,7 @@ const OrdersPage = () => {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
     datasets: [
       {
-        label: 'Revenue ($)',
+        label: 'Revenue (₹)',
         data: [12000, 19000, 8000, 15000, 25000, 22000],
         fill: false,
         borderColor: 'rgb(34, 197, 94)',
@@ -45,7 +45,7 @@ const OrdersPage = () => {
     labels: orders.slice(0, 10).map((order, index) => `Order ${index + 1}`),
     datasets: [
       {
-        label: 'Order Value ($)',
+        label: 'Order Value (₹)',
         data: orders.slice(0, 10).map(order => parseFloat(order.totalPrice || 0)),
         backgroundColor: 'rgba(59, 130, 246, 0.5)',
         borderColor: 'rgba(59, 130, 246, 1)',
@@ -104,13 +104,13 @@ const OrdersPage = () => {
         </div>
         <div className="bg-white p-6 rounded-lg shadow">
           <div className="text-2xl font-bold text-blue-600">
-            ${orders.reduce((sum, order) => sum + parseFloat(order.totalPrice || 0), 0).toFixed(2)}
+            ₹{orders.reduce((sum, order) => sum + parseFloat(order.totalPrice || 0), 0).toFixed(2)}
           </div>
           <div className="text-sm text-gray-500">Total Revenue</div>
         </div>
         <div className="bg-white p-6 rounded-lg shadow">
           <div className="text-2xl font-bold text-purple-600">
-            ${orders.length > 0 ? (orders.reduce((sum, order) => sum + parseFloat(order.totalPrice || 0), 0) / orders.length).toFixed(2) : '0.00'}
+            ₹{orders.length > 0 ? (orders.reduce((sum, order) => sum + parseFloat(order.totalPrice || 0), 0) / orders.length).toFixed(2) : '0.00'}
           </div>
           <div className="text-sm text-gray-500">Average Order Value</div>
         </div>
@@ -168,7 +168,7 @@ const OrdersPage = () => {
                     {order.customer?.name || 'Unknown Customer'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    ${parseFloat(order.totalPrice || 0).toFixed(2)}
+                    ₹{parseFloat(order.totalPrice || 0).toFixed(2)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {new Date(order.orderDate).toLocaleDateString()}

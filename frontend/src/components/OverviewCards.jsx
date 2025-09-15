@@ -142,7 +142,7 @@ const OverviewCards = () => {
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-sm font-medium text-gray-500 mb-2">Total Revenue</h3>
-            <p className="text-3xl font-bold text-green-600">${summary?.totalRevenue.toLocaleString()}</p>
+            <p className="text-3xl font-bold text-green-600">₹{summary?.totalRevenue.toLocaleString()}</p>
           </div>
           <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
             <FiDollarSign className="h-6 w-6 text-green-600" />

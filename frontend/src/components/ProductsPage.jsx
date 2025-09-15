@@ -31,7 +31,7 @@ const ProductsPage = () => {
     labels: products.slice(0, 10).map(product => product.name),
     datasets: [
       {
-        label: 'Price ($)',
+        label: 'Price (₹)',
         data: products.slice(0, 10).map(product => parseFloat(product.price || 0)),
         backgroundColor: 'rgba(168, 85, 247, 0.5)',
         borderColor: 'rgba(168, 85, 247, 1)',
@@ -42,10 +42,10 @@ const ProductsPage = () => {
 
   // Price distribution
   const priceRanges = {
-    'Under $25': products.filter(p => parseFloat(p.price || 0) < 25).length,
-    '$25-$50': products.filter(p => parseFloat(p.price || 0) >= 25 && parseFloat(p.price || 0) < 50).length,
-    '$50-$100': products.filter(p => parseFloat(p.price || 0) >= 50 && parseFloat(p.price || 0) < 100).length,
-    'Over $100': products.filter(p => parseFloat(p.price || 0) >= 100).length,
+    'Under ₹25': products.filter(p => parseFloat(p.price || 0) < 25).length,
+    '₹25-₹50': products.filter(p => parseFloat(p.price || 0) >= 25 && parseFloat(p.price || 0) < 50).length,
+    '₹50-₹100': products.filter(p => parseFloat(p.price || 0) >= 50 && parseFloat(p.price || 0) < 100).length,
+    'Over ₹100': products.filter(p => parseFloat(p.price || 0) >= 100).length,
   };
 
   const priceDistributionData = {
@@ -120,13 +120,13 @@ const ProductsPage = () => {
         </div>
         <div className="bg-white p-6 rounded-lg shadow">
           <div className="text-2xl font-bold text-green-600">
-            ${products.length > 0 ? (products.reduce((sum, product) => sum + parseFloat(product.price || 0), 0) / products.length).toFixed(2) : '0.00'}
+            ₹{products.length > 0 ? (products.reduce((sum, product) => sum + parseFloat(product.price || 0), 0) / products.length).toFixed(2) : '0.00'}
           </div>
           <div className="text-sm text-gray-500">Average Price</div>
         </div>
         <div className="bg-white p-6 rounded-lg shadow">
           <div className="text-2xl font-bold text-blue-600">
-            ${Math.max(...products.map(p => parseFloat(p.price || 0))).toFixed(2)}
+            ₹{Math.max(...products.map(p => parseFloat(p.price || 0))).toFixed(2)}
           </div>
           <div className="text-sm text-gray-500">Highest Price</div>
         </div>
@@ -184,7 +184,7 @@ const ProductsPage = () => {
                     {product.sku || 'N/A'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    ${parseFloat(product.price || 0).toFixed(2)}
+                    ₹{parseFloat(product.price || 0).toFixed(2)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {new Date(product.createdAt).toLocaleDateString()}

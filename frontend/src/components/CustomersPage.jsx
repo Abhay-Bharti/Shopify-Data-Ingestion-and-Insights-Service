@@ -31,7 +31,7 @@ const CustomersPage = () => {
     labels: customers.slice(0, 10).map(customer => customer.name),
     datasets: [
       {
-        label: 'Total Spent ($)',
+        label: 'Total Spent (₹)',
         data: customers.slice(0, 10).map(customer => parseFloat(customer.totalSpent || 0)),
         backgroundColor: 'rgba(59, 130, 246, 0.5)',
         borderColor: 'rgba(59, 130, 246, 1)',
@@ -104,13 +104,13 @@ const CustomersPage = () => {
         </div>
         <div className="bg-white p-6 rounded-lg shadow">
           <div className="text-2xl font-bold text-green-600">
-            ${customers.reduce((sum, customer) => sum + parseFloat(customer.totalSpent || 0), 0).toFixed(2)}
+            ₹{customers.reduce((sum, customer) => sum + parseFloat(customer.totalSpent || 0), 0).toFixed(2)}
           </div>
           <div className="text-sm text-gray-500">Total Customer Value</div>
         </div>
         <div className="bg-white p-6 rounded-lg shadow">
           <div className="text-2xl font-bold text-purple-600">
-            ${customers.length > 0 ? (customers.reduce((sum, customer) => sum + parseFloat(customer.totalSpent || 0), 0) / customers.length).toFixed(2) : '0.00'}
+            ₹{customers.length > 0 ? (customers.reduce((sum, customer) => sum + parseFloat(customer.totalSpent || 0), 0) / customers.length).toFixed(2) : '0.00'}
           </div>
           <div className="text-sm text-gray-500">Average Spent per Customer</div>
         </div>
@@ -168,7 +168,7 @@ const CustomersPage = () => {
                     {customer.email}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    ${parseFloat(customer.totalSpent || 0).toFixed(2)}
+                    ₹{parseFloat(customer.totalSpent || 0).toFixed(2)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {new Date(customer.createdAt).toLocaleDateString()}
