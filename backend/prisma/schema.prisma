@@ -1,0 +1,121 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  tenantId  String?  @map("tenant_id")
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  tenant    Tenant?  @relation(fields: [tenantId], references: [id])
+
+  @@map("users")
+}
+
+model Tenant {
+  id              String        @id @default(cuid())
+  name            String
+  shopifyStoreUrl String        @unique @map("shopify_store_url")
+  apiKey          String        @map("api_key")
+  apiSecret       String        @map("api_secret")
+  isActive        Boolean       @default(true) @map("is_active")
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+  customEvents    CustomEvent[]
+  customers       Customer[]
+  orders          Order[]
+  products        Product[]
+  users           User[]
+
+  @@map("tenants")
+}
+
+model Customer {
+  id         String   @id @default(cuid())
+  tenantId   String   @map("tenant_id")
+  shopifyId  String   @map("shopify_id")
+  name       String
+  email      String
+  totalSpent Decimal  @default(0) @map("total_spent")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  tenant     Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  orders     Order[]
+
+  @@unique([tenantId, shopifyId])
+  @@unique([email, tenantId])
+  @@map("customers")
+}
+
+model Product {
+  id         String      @id @default(cuid())
+  tenantId   String      @map("tenant_id")
+  shopifyId  String      @map("shopify_id")
+  name       String
+  sku        String?
+  price      Decimal
+  createdAt  DateTime    @default(now()) @map("created_at")
+  updatedAt  DateTime    @updatedAt @map("updated_at")
+  orderItems OrderItem[]
+  tenant     Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, shopifyId])
+  @@map("products")
+}
+
+model Order {
+  id         String      @id @default(cuid())
+  tenantId   String      @map("tenant_id")
+  customerId String      @map("customer_id")
+  shopifyId  String      @map("shopify_id")
+  totalPrice Decimal     @map("total_price")
+  orderDate  DateTime    @map("order_date")
+  createdAt  DateTime    @default(now()) @map("created_at")
+  updatedAt  DateTime    @updatedAt @map("updated_at")
+  orderItems OrderItem[]
+  customer   Customer    @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  tenant     Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, shopifyId])
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String   @id @default(cuid())
+  orderId   String   @map("order_id")
+  productId String   @map("product_id")
+  quantity  Int
+  price     Decimal
+  createdAt DateTime @default(now()) @map("created_at")
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("order_items")
+}
+
+model CustomEvent {
+  id            String   @id @default(cuid())
+  tenantId      String   @map("tenant_id")
+  eventType     String   @map("event_type")
+  customerEmail String?  @map("customer_email")
+  cartToken     String?  @map("cart_token")
+  checkoutToken String?  @map("checkout_token")
+  totalValue    Decimal? @map("total_value")
+  itemsCount    Int?     @map("items_count")
+  eventData     Json?    @map("event_data")
+  createdAt     DateTime @default(now()) @map("created_at")
+  tenant        Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, eventType])
+  @@index([customerEmail])
+  @@map("custom_events")
+}

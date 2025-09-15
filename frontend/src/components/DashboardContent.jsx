@@ -24,7 +24,7 @@ const DashboardContent = () => {
     <div className="space-y-8">
       {/* Welcome Section */}
       <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-8 rounded-xl shadow-sm border border-blue-100">
-        <h2 className="text-3xl font-bold text-gray-900 mb-3">Welcome to Xeno Analytics</h2>
+        <h2 className="text-3xl font-bold text-gray-900 mb-3">Welcome to Shopify Analytics</h2>
         <p className="text-gray-600 text-lg">
           Monitor your Shopify store performance with detailed analytics on customers, products, and orders.
           Use the navigation menu to explore different sections.

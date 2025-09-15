@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { FiMail, FiLock, FiEye, FiEyeOff, FiBarChart2, FiTrendingUp, FiUsers, FiShoppingBag } from 'react-icons/fi';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -48,7 +46,6 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
       
       <div className="flex-1 flex">
         {/* Left Content Section */}
@@ -210,7 +207,6 @@ const Login = () => {
         </div>
       </div>
 
-      <Footer />
     </div>
   );
 };
