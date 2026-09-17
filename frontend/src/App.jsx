@@ -5,12 +5,14 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
+import TenantSetupModal from './components/TenantSetupModal';
 
 function App() {
   return (
     <AuthProvider>
       <Router>
         <div className="App">
+          <TenantSetupModal />
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />

@@ -74,6 +74,16 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const saveTenant = async (details) => {
+    try {
+      const response = await apiService.saveTenant(details);
+      setUser(currentUser => ({ ...currentUser, tenant: response.data.tenant }));
+      return response.data.tenant;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Unable to save Shopify details');
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem('token');
     apiService.clearAuthToken();
@@ -84,6 +94,7 @@ export const AuthProvider = ({ children }) => {
     user,
     login,
     register,
+    saveTenant,
     logout,
     loading,
     isAuthenticated: !!user

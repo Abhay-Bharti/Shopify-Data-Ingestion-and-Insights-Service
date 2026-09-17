@@ -7,38 +7,17 @@ export const syncShopifyData = async (req, res) => {
   try {
     const user = req.user;
     
-    // Get Shopify configuration from environment
-    const shopifyStore = process.env.SHOPIFY_STORE_URL;
-    const shopifyApiKey = process.env.SHOPIFY_API_KEY;
-    const shopifyApiSecret = process.env.SHOPIFY_API_SECRET;
-    
-    if (!shopifyStore || !shopifyApiKey || !shopifyApiSecret) {
-      return res.status(500).json({
-        error: 'Shopify configuration missing in environment variables'
-      });
-    }
-
-    // For now, create a tenant for the user if they don't have one
     let tenant = user.tenant;
     
     if (!tenant) {
-      // Create a tenant for this user using the environment Shopify configuration
-      tenant = await prisma.tenant.create({
-        data: {
-          name: `${user.name}'s Store`,
-          shopifyStoreUrl: shopifyStore,
-          apiKey: shopifyApiKey,
-          apiSecret: shopifyApiSecret,
-          isActive: true,
-        },
-      });
-
-      // Associate the user with this tenant
-      await prisma.user.update({
-        where: { id: user.id },
-        data: { tenantId: tenant.id },
+      return res.status(400).json({
+        error: 'Shopify tenant details are required before syncing'
       });
     }
+
+    const shopifyStore = tenant.shopifyStoreUrl;
+    const shopifyApiKey = tenant.apiKey;
+    const shopifyApiSecret = tenant.apiSecret;
 
     // Initialize Shopify service
     const shopifyService = new ShopifyService({

@@ -71,6 +71,11 @@ class ApiService {
     return response.data;
   }
 
+  async saveTenant(details) {
+    const response = await this.axios.put('/api/auth/tenant', details);
+    return response.data;
+  }
+
   async getProfile() {
     const response = await this.axios.get('/api/auth/profile');
     return response.data;

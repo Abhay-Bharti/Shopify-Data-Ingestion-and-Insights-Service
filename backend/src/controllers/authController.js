@@ -9,6 +9,19 @@ const generateToken = (userId) => {
   return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '7d' });
 };
 
+const publicUser = (user) => {
+  const { password: _, tenant, ...userWithoutPassword } = user;
+  return {
+    ...userWithoutPassword,
+    tenant: tenant ? {
+      id: tenant.id,
+      name: tenant.name,
+      shopifyStoreUrl: tenant.shopifyStoreUrl,
+      isActive: tenant.isActive
+    } : null
+  };
+};
+
 // Register a new user
 export const register = async (req, res) => {
   try {
@@ -62,13 +75,11 @@ export const register = async (req, res) => {
     const token = generateToken(user.id);
 
     // Remove password from response
-    const { password: _, ...userWithoutPassword } = user;
-
     res.status(201).json({
       success: true,
       message: 'User registered successfully',
       data: {
-        user: userWithoutPassword,
+        user: publicUser(user),
         token
       }
     });
@@ -132,13 +143,11 @@ export const login = async (req, res) => {
     const token = generateToken(user.id);
 
     // Remove password from response
-    const { password: _, ...userWithoutPassword } = user;
-
     res.json({
       success: true,
       message: 'Login successful',
       data: {
-        user: userWithoutPassword,
+        user: publicUser(user),
         token
       }
     });
@@ -169,13 +178,10 @@ export const getProfile = async (req, res) => {
       });
     }
 
-    // Remove password from response
-    const { password: _, ...userWithoutPassword } = user;
-
     res.json({
       success: true,
       data: {
-        user: userWithoutPassword
+        user: publicUser(user)
       }
     });
 
@@ -225,15 +231,10 @@ export const updateProfile = async (req, res) => {
       }
     });
 
-    // Remove password from response
-    const { password: _, ...userWithoutPassword } = user;
-
     res.json({
       success: true,
       message: 'Profile updated successfully',
-      data: {
-        user: userWithoutPassword
-      }
+      data: { user: publicUser(user) }
     });
 
   } catch (error) {
@@ -241,6 +242,66 @@ export const updateProfile = async (req, res) => {
     res.status(500).json({ 
       success: false, 
       message: 'Internal server error' 
+    });
+  }
+};
+
+// Create or connect the authenticated user to a Shopify tenant
+export const saveTenant = async (req, res) => {
+  try {
+    const { name, shopifyStoreUrl, apiKey, apiSecret } = req.body;
+
+    if (!shopifyStoreUrl || !apiKey || !apiSecret) {
+      return res.status(400).json({
+        success: false,
+        message: 'Store URL, API key, and API secret are required'
+      });
+    }
+
+    const normalizedStoreUrl = shopifyStoreUrl
+      .trim()
+      .replace(/^https?:\/\//, '')
+      .replace(/\/$/, '');
+
+    const tenant = await prisma.$transaction(async (tx) => {
+      const existingTenant = await tx.tenant.findUnique({
+        where: { shopifyStoreUrl: normalizedStoreUrl }
+      });
+
+      const savedTenant = existingTenant || await tx.tenant.create({
+        data: {
+          name: name?.trim() || `${req.user.name}'s Store`,
+          shopifyStoreUrl: normalizedStoreUrl,
+          apiKey: apiKey.trim(),
+          apiSecret: apiSecret.trim(),
+          isActive: true,
+        }
+      });
+
+      await tx.user.update({
+        where: { id: req.userId },
+        data: { tenantId: savedTenant.id }
+      });
+
+      return savedTenant;
+    });
+
+    res.json({
+      success: true,
+      data: {
+        tenant: {
+          id: tenant.id,
+          name: tenant.name,
+          shopifyStoreUrl: tenant.shopifyStoreUrl,
+          isActive: tenant.isActive
+        }
+      }
+    });
+  } catch (error) {
+    console.error('Tenant setup error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Unable to save Shopify tenant details'
     });
   }
 };
