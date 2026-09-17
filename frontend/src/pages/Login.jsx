@@ -193,11 +193,6 @@ const Login = () => {
                 )}
               </button>
 
-              <div className="text-center">
-                <a href="#" className="text-sm text-blue-600 hover:text-blue-500 transition-colors">
-                  Forgot your password?
-                </a>
-              </div>
             </form>
           </div>
         </div>

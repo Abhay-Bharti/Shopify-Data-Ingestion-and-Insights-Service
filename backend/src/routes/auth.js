@@ -1,5 +1,5 @@
 import express from 'express';
-import { register, login, getProfile, updateProfile, saveTenant } from '../controllers/authController.js';
+import { register, login, getProfile, updateProfile, saveTenant, updateTenant } from '../controllers/authController.js';
 import { authenticateToken } from '../middleware/auth.js';
 
 const router = express.Router();
@@ -12,5 +12,6 @@ router.post('/login', login);
 router.get('/profile', authenticateToken, getProfile);
 router.put('/profile', authenticateToken, updateProfile);
 router.put('/tenant', authenticateToken, saveTenant);
+router.put('/tenant/details', authenticateToken, updateTenant);
 
 export default router;

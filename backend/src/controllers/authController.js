@@ -197,7 +197,7 @@ export const getProfile = async (req, res) => {
 // Update user profile
 export const updateProfile = async (req, res) => {
   try {
-    const { name, email } = req.body;
+    const { name, email, password } = req.body;
 
     // Validation
     if (!name || !email) {
@@ -225,7 +225,11 @@ export const updateProfile = async (req, res) => {
     // Update user
     const user = await prisma.user.update({
       where: { id: req.userId },
-      data: { name, email },
+      data: {
+        name,
+        email,
+        ...(password ? { password: await bcrypt.hash(password, 12) } : {})
+      },
       include: {
         tenant: true
       }
@@ -302,6 +306,64 @@ export const saveTenant = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Unable to save Shopify tenant details'
+    });
+  }
+};
+
+// Update the authenticated user's Shopify connection
+export const updateTenant = async (req, res) => {
+  try {
+    const { name, shopifyStoreUrl, apiKey, apiSecret } = req.body;
+    const user = await prisma.user.findUnique({
+      where: { id: req.userId },
+      select: { tenantId: true }
+    });
+
+    if (!user?.tenantId || !shopifyStoreUrl || !apiKey) {
+      return res.status(400).json({
+        success: false,
+        message: 'Store URL and API key are required'
+      });
+    }
+
+    const normalizedStoreUrl = shopifyStoreUrl
+      .trim()
+      .replace(/^https?:\/\//, '')
+      .replace(/\/$/, '');
+
+    const tenant = await prisma.tenant.update({
+      where: { id: user.tenantId },
+      data: {
+        name: name?.trim() || undefined,
+        shopifyStoreUrl: normalizedStoreUrl,
+        apiKey: apiKey.trim(),
+        ...(apiSecret?.trim() ? { apiSecret: apiSecret.trim() } : {})
+      }
+    });
+
+    res.json({
+      success: true,
+      message: 'Shopify details updated successfully',
+      data: {
+        tenant: {
+          id: tenant.id,
+          name: tenant.name,
+          shopifyStoreUrl: tenant.shopifyStoreUrl,
+          isActive: tenant.isActive
+        }
+      }
+    });
+  } catch (error) {
+    console.error('Tenant update error:', error);
+    if (error.code === 'P2002') {
+      return res.status(409).json({
+        success: false,
+        message: 'That Shopify store URL is already connected to another account'
+      });
+    }
+    res.status(500).json({
+      success: false,
+      message: 'Unable to update Shopify details'
     });
   }
 };

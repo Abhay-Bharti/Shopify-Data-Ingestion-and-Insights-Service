@@ -6,6 +6,7 @@ import CustomersPage from '../components/CustomersPage';
 import OrdersPage from '../components/OrdersPage';
 import ProductsPage from '../components/ProductsPage';
 import { FiUser, FiMail } from 'react-icons/fi';
+import ProfileContent from '../components/ProfileContent';
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -21,6 +22,8 @@ const Dashboard = () => {
         return <OrdersPage />;
       case 'products':
         return <ProductsPage />;
+      case 'profile':
+        return <ProfileContent />;
       default:
         return <DashboardContent />;
     }
@@ -36,6 +39,8 @@ const Dashboard = () => {
         return 'Order Analytics';
       case 'products':
         return 'Product Analytics';
+      case 'profile':
+        return 'Settings';
       default:
         return 'Dashboard';
     }

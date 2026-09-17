@@ -22,8 +22,6 @@ const PORT = process.env.PORT || 3000;
 app.use(helmet());
 app.use(cors({
   origin: [
-    'http://localhost:5173',
-    'https://shopify-analytics.verc`el.app',
     process.env.FRONTEND_URL
   ].filter(Boolean),
   credentials: true,

@@ -81,11 +81,17 @@ class ApiService {
     return response.data;
   }
 
-  async updateProfile(name, email) {
+  async updateProfile(name, email, password) {
     const response = await this.axios.put('/api/auth/profile', {
       name,
       email,
+      password,
     });
+    return response.data;
+  }
+
+  async updateTenant(details) {
+    const response = await this.axios.put('/api/auth/tenant/details', details);
     return response.data;
   }
 

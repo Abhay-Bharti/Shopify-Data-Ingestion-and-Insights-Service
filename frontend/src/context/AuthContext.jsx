@@ -84,6 +84,26 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateProfile = async (details) => {
+    try {
+      const response = await apiService.updateProfile(details.name, details.email, details.password);
+      setUser(response.data.user);
+      return response.data.user;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Unable to update profile');
+    }
+  };
+
+  const updateTenant = async (details) => {
+    try {
+      const response = await apiService.updateTenant(details);
+      setUser(currentUser => ({ ...currentUser, tenant: response.data.tenant }));
+      return response.data.tenant;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Unable to update Shopify details');
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem('token');
     apiService.clearAuthToken();
@@ -95,6 +115,8 @@ export const AuthProvider = ({ children }) => {
     login,
     register,
     saveTenant,
+    updateProfile,
+    updateTenant,
     logout,
     loading,
     isAuthenticated: !!user

@@ -9,7 +9,8 @@ import {
   FiX,
   FiLogOut,
   FiChevronLeft,
-  FiChevronRight
+  FiChevronRight,
+  FiSettings
 } from 'react-icons/fi';
 
 const Sidebar = ({ activeTab, setActiveTab }) => {
@@ -21,6 +22,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
     { id: 'customers', label: 'Customers', icon: FiUsers },
     { id: 'orders', label: 'Orders', icon: FiShoppingBag },
     { id: 'products', label: 'Products', icon: FiPackage },
+    { id: 'profile', label: 'Settings', icon: FiSettings },
   ];
 
   return (
